@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    'account'
+    'account',
+    'quiz_app'
 ]
 
 AUTH_USER_MODEL = 'account.UserProfile'
