@@ -92,9 +92,6 @@ class StartQuizView(APIView):
         return Response({'message': 'Quiz started successfully'}, status=status.HTTP_200_OK)
 
 
-
-
-
 class SubmitQuizView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
@@ -165,50 +162,3 @@ class FeedbackRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = FeedbackSerializer
     permission_classes = (UpdateOwnFeedback,)
     authentication_classes = (TokenAuthentication,)
-
-
-
-# class SubmitQuizView(APIView):
-#     permission_classes = [IsAuthenticated]
-#     authentication_classes = (TokenAuthentication,)
-#
-#     def post(self, request, *args, **kwargs):
-#         user = request.user
-#         quiz_id = request.data.get('quiz_id')
-#         answers = request.data.get('answers')
-#
-#         if answers is None:
-#             return Response({'answers': 'Answers not provided'}, status=status.HTTP_400_BAD_REQUEST)
-#
-#         try:
-#             quiz = Quiz.objects.get(id=quiz_id)
-#             participant = Participant.objects.get(user=user, quiz=quiz)
-#         except Quiz.DoesNotExist:
-#             return Response({'quiz_id': 'Invalid quiz ID'}, status=status.HTTP_400_BAD_REQUEST)
-#         except Participant.DoesNotExist:
-#             return Response({'user': 'Participant not found'}, status=status.HTTP_400_BAD_REQUEST)
-#
-#         score = 0
-#
-#         for answer_data in answers:
-#             serializer = AnswerSubmissionSerializer(data=answer_data)
-#             if serializer.is_valid():
-#                 question_id = serializer.validated_data['question_id']
-#                 selected_answer = serializer.validated_data['selected_answer']
-#
-#                 try:
-#                     question = Question.objects.get(id=question_id, quiz=quiz)
-#                     correct_answers = Answer.objects.filter(question=question, is_correct=True)
-#
-#                     if correct_answers.filter(id=selected_answer).exists():
-#                         score += question.point
-#                 except Question.DoesNotExist:
-#                     return Response({'question_id': 'Invalid question ID or it does not belong to the given Quiz'},
-#                                     status=status.HTTP_400_BAD_REQUEST)
-#             else:
-#                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#         participant.score = score
-#         participant.save()
-#
-#         return Response({'message': 'Quiz submitted successfully', 'score': score})

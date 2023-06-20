@@ -150,7 +150,7 @@ class SubmitQuizSerializer(serializers.Serializer):
             try:
                 question = Question.objects.get(id=question_id, quiz=quiz)
             except Question.DoesNotExist:
-                raise serializers.ValidationError("question is not belong to the given Quiz")
+                raise serializers.ValidationError("question is not belong to the given QuizAPI")
 
             correct_answers = Answer.objects.filter(question=question, is_correct=True)
             if correct_answers.filter(id=selected_answer).exists():
@@ -213,7 +213,3 @@ class FeedbackSerializer(serializers.ModelSerializer):
         feedback = Feedback.objects.create(quiz_id=quiz_id, participant=participant, **validated_data)
 
         return feedback
-
-# class AnswerSubmissionSerializer(serializers.Serializer):
-#     question_id = serializers.IntegerField()
-#     selected_answer = serializers.IntegerField()

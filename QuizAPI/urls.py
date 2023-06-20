@@ -1,5 +1,5 @@
 """
-URL configuration for Quiz project.
+URL configuration for QuizAPI project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -20,6 +20,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/account/', include('account.urls', namespace='account')),
-    path('api/', include('quiz_app.urls', namespace='quiz')),
+    path('api/', include('quiz.urls', namespace='quiz')),
 
 ]

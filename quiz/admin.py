@@ -1,5 +1,5 @@
 from django.contrib import admin
-from quiz_app.models import Feedback, Participant, Answer, Question, Quiz, Tag, Category
+from quiz.models import Feedback, Participant, Answer, Question, Quiz, Tag, Category
 
 # Register your models here.
 
