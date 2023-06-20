@@ -30,7 +30,7 @@ class TagSerializer(serializers.ModelSerializer):
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
-        fields = ('id', 'answer_text', 'is_correct',)
+        fields = ('id', 'text', 'is_correct',)
 
     def create(self, validated_data):
         question_id = self.context['view'].kwargs['pk']

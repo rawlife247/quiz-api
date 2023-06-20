@@ -48,11 +48,11 @@ class Question(models.Model):
 
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="answers")
-    answer_text = models.CharField(max_length=255)
+    text = models.CharField(max_length=255)
     is_correct = models.BooleanField()
 
     def __str__(self):
-        return self.answer_text
+        return self.text
 
 
 class Participant(models.Model):
