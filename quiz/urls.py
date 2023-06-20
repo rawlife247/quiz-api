@@ -12,7 +12,8 @@ app_name = 'quiz'
 
 urlpatterns = [
     path('quizzes/categories/', CategoryListCreateView.as_view(), name='category-list-create'),
-    path('quizzes/categories/<int:pk>/', CategoryRetrieveUpdateDeleteView.as_view(), name='category-retrieve-update-delete'),
+    path('quizzes/categories/<int:pk>/', CategoryRetrieveUpdateDeleteView.as_view(),
+         name='category-retrieve-update-delete'),
 
     path('quizzes/tags/', TagListCreateView.as_view(), name='tag-list-create'),
     path('quizzes/tags/<int:pk>/', TagRetrieveUpdateDeleteView.as_view(), name='tag-retrieve-update-delete'),
@@ -27,7 +28,6 @@ urlpatterns = [
     path('questions/<int:pk>/answers/', AnswerListCreateView.as_view(), name='answer-list-create'),
 
     path('answers/<int:pk>/', AnswerRetrieveUpdateDeleteView.as_view(), name='answer-retrieve-update-delete'),
-
 
     path('quizzes/<int:pk>/feedback/', FeedbackListCreateView.as_view(), name='feedback-list-create'),
     path('feedback/<int:pk>/', FeedbackRetrieveUpdateDeleteView.as_view(), name='feedback-retrieve-update-delete')
