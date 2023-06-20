@@ -17,7 +17,6 @@ from .permissions import IsStaffOrReadOnly, IsAuthenticatedOrReadOnly, IsFeedbac
 
 class CategoryListCreateView(generics.ListCreateAPIView):
     permission_classes = (IsStaffOrReadOnly,)
-    authentication_classes = (TokenAuthentication,)
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
@@ -26,21 +25,18 @@ class CategoryRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = (IsStaffOrReadOnly,)
-    authentication_classes = (TokenAuthentication,)
 
 
 class TagListCreateView(generics.ListCreateAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (IsStaffOrReadOnly,)
-    authentication_classes = (TokenAuthentication,)
 
 
 class TagRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (IsStaffOrReadOnly,)
-    authentication_classes = (TokenAuthentication,)
 
 
 class QuizListCreateView(generics.ListCreateAPIView):
@@ -48,7 +44,6 @@ class QuizListCreateView(generics.ListCreateAPIView):
     serializer_class = QuizSerializer
 
     permission_classes = (IsStaffOrReadOnly,)
-    authentication_classes = (TokenAuthentication,)
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
@@ -58,12 +53,10 @@ class QuizRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
     permission_classes = (IsStaffOrReadOnly,)
-    authentication_classes = (TokenAuthentication,)
 
 
 class StartQuizView(APIView):
     permission_classes = [IsAuthenticated]
-    authentication_classes = (TokenAuthentication,)
 
     def post(self, request, *args, **kwargs):
         user = request.user
@@ -94,7 +87,6 @@ class StartQuizView(APIView):
 
 class SubmitQuizView(APIView):
     permission_classes = [IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
 
     def post(self, request, *args, **kwargs):
         serializer = SubmitQuizSerializer(data=request.data, context={'request': request})
@@ -108,7 +100,6 @@ class QuestionListCreateView(generics.ListCreateAPIView):
     serializer_class = QuestionSerializer
 
     permission_classes = (IsStaffOrReadOnly,)
-    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -119,7 +110,6 @@ class QuestionRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
     permission_classes = (IsStaffOrReadOnly,)
-    authentication_classes = (TokenAuthentication,)
 
 
 class AnswerListCreateView(generics.ListCreateAPIView):
@@ -127,7 +117,6 @@ class AnswerListCreateView(generics.ListCreateAPIView):
     serializer_class = AnswerSerializer
 
     permission_classes = (IsStaffOrReadOnly,)
-    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -138,14 +127,12 @@ class AnswerRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
     permission_classes = (IsStaffOrReadOnly,)
-    authentication_classes = (TokenAuthentication,)
 
 
 class FeedbackListCreateView(generics.ListCreateAPIView):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
-    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -161,4 +148,3 @@ class FeedbackRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
     permission_classes = (IsFeedbackOwner,)
-    authentication_classes = (TokenAuthentication,)

@@ -83,6 +83,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Settings for REST_FRAMEWORK
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
+
 # Internationalization
 
 LANGUAGE_CODE = 'en-us'
