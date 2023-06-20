@@ -5,6 +5,11 @@ from account.models import UserProfile
 
 
 class Category(models.Model):
+    """
+    Represents a category for quizzes.
+    Use Case: Categorizing quizzes based on different topics or subjects.
+    """
+
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -12,6 +17,11 @@ class Category(models.Model):
 
 
 class Tag(models.Model):
+    """
+    Represents a tag for quizzes.
+    Use Case: Tagging quizzes with relevant keywords or labels for easier searching and organization.
+    """
+
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -19,6 +29,11 @@ class Tag(models.Model):
 
 
 class Quiz(models.Model):
+    """
+    Represents a quiz containing multiple questions.
+    Use Case: Creating and managing quizzes with titles, descriptions, time limits, and associations to categories and tags.
+    """
+
     title = models.CharField(max_length=255)
     description = models.TextField()
     time_limit = models.PositiveIntegerField()
@@ -31,12 +46,22 @@ class Quiz(models.Model):
 
 
 class QuestionType(models.TextChoices):
+    """
+    Represents the types of questions that can be used in quizzes.
+    Use Case: Providing predefined options for the types of questions that can be created.
+    """
+
     MULTIPLE_CHOICE = 'MC', _('Multiple Choice')
     TRUE_FALSE = 'TF', _('True/False')
     OPEN_ENDED = 'OE', _('Open-Ended')
 
 
 class Question(models.Model):
+    """
+    Represents a question within a quiz.
+    Use Case: Storing individual questions with associated quizzes, text content, types, and point values.
+    """
+
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='questions')
     text = models.TextField()
     type = models.CharField(max_length=2, choices=QuestionType.choices)
@@ -47,6 +72,11 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
+    """
+    Represents an answer for a question.
+    Use Case: Capturing possible answers for each question, along with an indicator of correctness.
+    """
+
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="answers")
     text = models.CharField(max_length=255)
     is_correct = models.BooleanField()
@@ -56,6 +86,11 @@ class Answer(models.Model):
 
 
 class Participant(models.Model):
+    """
+    Represents a participant who takes a quiz.
+    Use Case: Managing participants' involvement in quizzes, tracking start and end times, and recording scores.
+    """
+
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     start_time = models.DateTimeField()
@@ -67,6 +102,11 @@ class Participant(models.Model):
 
 
 class Feedback(models.Model):
+    """
+    Represents feedback provided by a participant for a quiz.
+    Use Case: Collecting participants' ratings and comments for quizzes to gather feedback and improve future quizzes.
+    """
+
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
