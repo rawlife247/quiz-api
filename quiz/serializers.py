@@ -6,7 +6,7 @@ from django.utils import timezone
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = ('id', 'name')
 
     def validate_name(self, value):
         exists_already = Category.objects.filter(name__iexact=value).exists()
@@ -18,7 +18,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = '__all__'
+        fields = ('id', 'name')
 
     def validate_name(self, value):
         exists_already = Tag.objects.filter(name__iexact=value).exists()
@@ -150,7 +150,7 @@ class SubmitQuizSerializer(serializers.Serializer):
             try:
                 question = Question.objects.get(id=question_id, quiz=quiz)
             except Question.DoesNotExist:
-                raise serializers.ValidationError("question is not belong to the given QuizAPI")
+                raise serializers.ValidationError("question is not belong to the given Quiz")
 
             correct_answers = Answer.objects.filter(question=question, is_correct=True)
             if correct_answers.filter(id=selected_answer).exists():
@@ -196,20 +196,23 @@ class FeedbackSerializer(serializers.ModelSerializer):
         model = Feedback
         fields = ('id', 'rating', 'comment')
 
-    def create(self, validated_data):
+    def validate(self, data):
         quiz_id = self.context['view'].kwargs['pk']
         user = self.context['user']
 
-        quiz = Quiz.objects.filter(pk=quiz_id).exists()
-        if not quiz:
+        try:
+            quiz = Quiz.objects.get(pk=quiz_id)
+        except Quiz.DoesNotExist:
             raise serializers.ValidationError({'error': 'Invalid quiz ID'})
 
         try:
-            participant = Participant.objects.get(quiz_id=quiz_id, user=user)
-
+            participant = Participant.objects.get(quiz=quiz, user=user)
         except Participant.DoesNotExist:
             raise serializers.ValidationError("You can provide feedback after taking the quiz")
 
-        feedback = Feedback.objects.create(quiz_id=quiz_id, participant=participant, **validated_data)
+        data['quiz'] = quiz
+        data['participant'] = participant
+        return data
 
-        return feedback
+    def create(self, validated_data):
+        return Feedback.objects.create(**validated_data)
