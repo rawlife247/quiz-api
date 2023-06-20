@@ -21,7 +21,7 @@ class Quiz(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     time_limit = models.PositiveIntegerField()
-    owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     categories = models.ManyToManyField(Category)
     tags = models.ManyToManyField(Tag)
 
