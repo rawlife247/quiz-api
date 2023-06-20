@@ -20,7 +20,7 @@ class IsAuthenticatedOrReadOnly(permissions.BasePermission):
         return request.user and request.user.is_authenticated
 
 
-class UpdateOwnFeedback(permissions.BasePermission):
+class IsFeedbackOwner(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:

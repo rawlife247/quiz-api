@@ -12,7 +12,7 @@ from .serializers import (
     CategorySerializer, TagSerializer, QuizSerializer,
     QuestionSerializer, AnswerSerializer, FeedbackSerializer, SubmitQuizSerializer
 )
-from .permissions import IsStaffOrReadOnly, IsAuthenticatedOrReadOnly, UpdateOwnFeedback
+from .permissions import IsStaffOrReadOnly, IsAuthenticatedOrReadOnly, IsFeedbackOwner
 
 
 class CategoryListCreateView(generics.ListCreateAPIView):
@@ -160,5 +160,5 @@ class FeedbackListCreateView(generics.ListCreateAPIView):
 class FeedbackRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
-    permission_classes = (UpdateOwnFeedback,)
+    permission_classes = (IsFeedbackOwner,)
     authentication_classes = (TokenAuthentication,)
