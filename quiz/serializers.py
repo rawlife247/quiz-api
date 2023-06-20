@@ -78,8 +78,8 @@ class QuizSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Quiz
-        fields = ('id', 'title', 'description', 'time_limit', 'tags', 'categories', 'owner', 'questions')
-        read_only_fields = ['owner', ]
+        fields = ('id', 'title', 'description', 'time_limit', 'tags', 'categories', 'created_by', 'questions')
+        read_only_fields = ['created_by', ]
 
     def create(self, validated_data):
         questions_data = validated_data.pop('questions')

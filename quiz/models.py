@@ -1,4 +1,5 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils.translation import gettext_lazy as _
 from django.db import models
 from account.models import UserProfile
 
@@ -29,16 +30,16 @@ class Quiz(models.Model):
         return self.title
 
 
-class Question(models.Model):
-    QUESTION_TYPES = (
-        ('MC', 'Multiple Choice'),
-        ('TF', 'True/False'),
-        ('OE', 'Open-Ended')
-    )
+class QuestionType(models.TextChoices):
+    MULTIPLE_CHOICE = 'MC', _('Multiple Choice')
+    TRUE_FALSE = 'TF', _('True/False')
+    OPEN_ENDED = 'OE', _('Open-Ended')
 
+
+class Question(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='questions')
     question_text = models.TextField()
-    question_type = models.CharField(max_length=2, choices=QUESTION_TYPES)
+    question_type = models.CharField(max_length=2, choices=QuestionType.choices)
     point = models.IntegerField(default=1)
 
     def __str__(self):
@@ -73,4 +74,3 @@ class Feedback(models.Model):
 
     def __str__(self):
         return f"Feedback for Quiz {self.quiz.title} by {self.participant.user.username}"
-
