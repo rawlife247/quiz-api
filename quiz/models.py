@@ -38,12 +38,12 @@ class QuestionType(models.TextChoices):
 
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='questions')
-    question_text = models.TextField()
-    question_type = models.CharField(max_length=2, choices=QuestionType.choices)
-    point = models.IntegerField(default=1)
+    text = models.TextField()
+    type = models.CharField(max_length=2, choices=QuestionType.choices)
+    points = models.IntegerField(default=1)
 
     def __str__(self):
-        return self.question_text
+        return self.text
 
 
 class Answer(models.Model):
