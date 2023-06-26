@@ -24,7 +24,7 @@ urlpatterns = [
     path('quizzes/start/', StartQuizView.as_view(), name='start-quiz'),
     path('quizzes/submit/', SubmitQuizView.as_view(), name='submit-quiz'),
 
-    path('questions/<int:pk>/', QuestionRetrieveUpdateDeleteView.as_view()),
+    path('questions/<int:pk>/', QuestionRetrieveUpdateDeleteView.as_view(), name='question-retrieve-update-delete'),
     path('questions/<int:pk>/answers/', AnswerListCreateView.as_view(), name='answer-list-create'),
 
     path('answers/<int:pk>/', AnswerRetrieveUpdateDeleteView.as_view(), name='answer-retrieve-update-delete'),
