@@ -1,6 +1,5 @@
 from rest_framework import generics, status
 from rest_framework.views import APIView
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
@@ -148,3 +147,8 @@ class FeedbackRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
     permission_classes = (IsFeedbackOwner,)
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['user'] = self.request.user
+        return context

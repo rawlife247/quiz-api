@@ -44,23 +44,23 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 
 class QuestionSerializer(serializers.ModelSerializer):
-    answers = AnswerSerializer(many=True)
+    answers = AnswerSerializer(many=True, required=False)
 
     class Meta:
         model = Question
         fields = ('id', 'text', 'type', 'points', 'answers')
 
     def create(self, validated_data):
-        answers_data = validated_data.pop('answers')
+        answers_data = validated_data.pop('answers', None)
         quiz_id = self.context['view'].kwargs['pk']
         quiz = Quiz.objects.filter(pk=quiz_id).exists()
         if not quiz:
             raise serializers.ValidationError({'error': 'Invalid quiz ID'})
 
         question = Question.objects.create(quiz_id=quiz_id, **validated_data)
-
-        for answer_data in answers_data:
-            Answer.objects.create(question=question, **answer_data)
+        if answers_data is not None:
+            for answer_data in answers_data:
+                Answer.objects.create(question=question, **answer_data)
 
         return question
 
@@ -74,7 +74,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
 class QuizSerializer(serializers.ModelSerializer):
-    questions = QuestionSerializer(many=True)
+    questions = QuestionSerializer(many=True, required=False)
 
     class Meta:
         model = Quiz
@@ -82,7 +82,7 @@ class QuizSerializer(serializers.ModelSerializer):
         read_only_fields = ['created_by', ]
 
     def create(self, validated_data):
-        questions_data = validated_data.pop('questions')
+        questions_data = validated_data.pop('questions', None)
         tags = validated_data.pop('tags')
         categories = validated_data.pop('categories')
 
@@ -90,12 +90,13 @@ class QuizSerializer(serializers.ModelSerializer):
         quiz.tags.set(tags)
         quiz.categories.set(categories)
 
-        for question_data in questions_data:
-            answers_data = question_data.pop('answers')
-            question = Question.objects.create(quiz=quiz, **question_data)
+        if questions_data is not None:
+            for question_data in questions_data:
+                answers_data = question_data.pop('answers')
+                question = Question.objects.create(quiz=quiz, **question_data)
 
-            for answer_data in answers_data:
-                Answer.objects.create(question=question, **answer_data)
+                for answer_data in answers_data:
+                    Answer.objects.create(question=question, **answer_data)
 
         return quiz
 
