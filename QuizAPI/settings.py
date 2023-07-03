@@ -18,10 +18,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'account',
+    'quiz',
     'rest_framework',
     'rest_framework.authtoken',
-    'account',
-    'quiz'
+    'drf_yasg',
+
 ]
 
 AUTH_USER_MODEL = 'account.UserProfile'
@@ -89,6 +91,18 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
+}
+
+# Settings for REST_FRAMEWORK
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
 }
 
 # Internationalization
