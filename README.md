@@ -1,6 +1,6 @@
 # Quiz App
 
-he Quiz Platform API is designed to provide a comprehensive solution for creating and managing
+The Quiz Platform API is designed to provide a comprehensive solution for creating and managing
 quizzes. It allows users to create quizzes, manage questions and answers, and enable others to
 participate in the quizzes. The API offers features such as scoring, timed quizzes etc.
 
@@ -10,6 +10,7 @@ participate in the quizzes. The API offers features such as scoring, timed quizz
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
 - [Testing](#testing)
+- [Generating Fake Data](#generating-fake-data)
 - [Contributing](#contributing)
 - [Contact](#contact)
 
@@ -21,10 +22,12 @@ Follow the steps below to install and configure the Quiz App API:
 
    ```shell
    git clone https://github.com/rayhanrock/quiz-api.git
+   ```
 
 2. Navigate to the project directory:
    ```shell
    cd quiz-api
+   ```
 
 
 3. Create a virtual environment for the project:
@@ -38,11 +41,13 @@ Follow the steps below to install and configure the Quiz App API:
    myenv\Scripts\activate
    # For macOS/Linux:
    source myenv/bin/activate
+   ```
 
 4. Install the required dependencies by navigating to the project directory and running the following command:
 
    ```shell
    pip install -r requirements.txt
+   ```
 
 5. Configure the email settings in the settings.py file:
 
@@ -57,16 +62,19 @@ Follow the steps below to install and configure the Quiz App API:
    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
    #Make sure to replace '###' with your own email credentials.
+   ```
 
 6. Apply the database migrations by running the following command:
 
    ```shell
    python manage.py migrate
+   ```
 
 7. Start the development server:
 
    ```shell
    python manage.py runserver
+   ```
 
 Please note that this installation assumes you have Python already set up on your system.
 
@@ -150,6 +158,62 @@ To run the tests for the Quiz app, follow the steps below:
 
    ```shell
    python manage.py test quiz
+   ```
+
+## Generating Fake Data
+
+To populate the database with fake users, categories, tags, and quizzes, you can use the following management commands:
+
+### Create Users
+
+1. To create fake users, run the following command:
+
+   ```shell
+   python manage.py create_users <num_users> <output_file>
+   ```
+
+Replace <num_users> with the desired number of fake users to create and <output_file> with the path where the usernames
+and passwords will be saved.
+
+For example, to create 10 users and save their details in a file named users.txt, run the command as follows:
+
+   ```shell
+   python manage.py create_users 10 users.txt
+   ```
+
+The command will generate fake user profiles and save their usernames and passwords in the specified file.
+
+### Create Quizzes
+
+To create sample quizzes with associated questions and answers, run the following command:
+
+   ```shell
+   python manage.py create_quizzes <num_quizzes> <num_questions_per_quiz>
+   ```
+
+Replace <num_quizzes> with the desired number of quizzes to create and <num_questions_per_quiz> with the number of
+questions to include in each quiz.
+
+For example, to create 5 quizzes, each with 3 questions, run the command as follows:
+
+   ```shell
+   python manage.py create_quizzes 5 3
+   
+   ```
+
+The command will generate sample quizzes, populate them with random questions, and associate random categories, tags,
+and users.
+
+### Create Categories and Tags
+
+To create categories and tags for quizzes, run the following command:
+
+```shell
+python manage.py create_categories <num_categories>
+python manage.py create_tags <num_tags>
+```
+
+Replace <num_categories> and <num_tags> with the desired number of categories and tags to create.
 
 ## Contributing
 
