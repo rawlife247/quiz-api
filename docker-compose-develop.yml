@@ -9,9 +9,5 @@ services:
     volumes:
       - ../quiz-api:/app
     command: sh -c "python manage.py runserver 0.0.0.0:8000"
-    environment:
-      - DEBUG = True
-      - SECRET_KEY = 'django-insecure-q9*+psd#d+exp$x5ec(t-1kpo8%aj_tm#hkzg=s1ath*(^mgge'
-      - EMAIL_HOST_USER = 'emailmanager.yourjobaid@gmail.com'
-      - EMAIL_HOST_PASSWORD = 'wnfyxpjxrroborwy'
-      - DATABASE_URL = 'postgresql://postgres:qZSvXJOKgXogWmU9Sgbh@containers-us-west-74.railway.app:7098/railway'
+    env_file:
+      - ./QuizAPI/.env
