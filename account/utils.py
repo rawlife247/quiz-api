@@ -2,6 +2,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings
 
+
 def send_reset_email(email, token, name):
     subject = "Your account verification email"
     email_from = settings.EMAIL_HOST_USER

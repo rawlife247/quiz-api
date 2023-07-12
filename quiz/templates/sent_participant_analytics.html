@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Template</title>
+    <style>
+        /* Global styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f6f6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Custom styles */
+        .email-template {
+            max-width: 95%;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .email-header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .email-header h1 {
+            margin: 0;
+        }
+
+        .email-body {
+            padding: 20px;
+        }
+
+        .email-footer {
+            background-color: #f2f2f2;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .past-quizzes {
+            margin-top: 20px;
+        }
+
+        .past-quizzes table {
+            margin-top: 10px;
+        }
+
+        .past-quizzes th, .past-quizzes td {
+            border-bottom: none;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 600px) {
+            .email-template {
+                width: 100% !important;
+                border-radius: 0 !important;
+            }
+
+            .email-header h1 {
+                font-size: 24px !important;
+            }
+
+            .email-body {
+                font-size: 10px !important;
+            }
+
+            .email-footer {
+                font-size: 12px !important;
+            }
+        }
+
+        /* Column width adjustments */
+        .column-wide {
+            width: 40%;
+        }
+
+        .column-narrow {
+            width: 20%;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="email-template">
+    <div class="email-header">
+        <h1>Hello , {{ report.full_name }}</h1>
+    </div>
+    <div class="email-body">
+        <table>
+            <tr>
+                <th class="column-wide">Quiz Title</th>
+                <th class="column-narrow">Quiz Total Point</th>
+                <th class="column-narrow">Score</th>
+                <th class="column-narrow">Has Passed</th>
+            </tr>
+            <tr>
+                <td>{{ report.quiz_title }}</td>
+                <td>{{ report.quiz_total_point }}</td>
+                <td>{{ report.score }}</td>
+                <td>{{ report.has_passed }}</td>
+            </tr>
+        </table>
+        <div class="past-quizzes">
+            <h2>Past Attempted Quizzes</h2>
+            <table>
+                <tr>
+                    <th class="column-wide">Quiz Title</th>
+                    <th class="column-narrow">Quiz Total Point</th>
+                    <th class="column-narrow">Score</th>
+                    <th class="column-narrow">Has Passed</th>
+                </tr>
+                {% for quiz in report.attempted_quiz %}
+                    <tr>
+                        <td>{{ quiz.quiz_title }}</td>
+                        <td>{{ quiz.quiz_total_point }}</td>
+                        <td>{{ quiz.score }}</td>
+                        <td>{{ quiz.has_passed }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="email-footer">
+        <p>This email is sent by Quiz App.</p>
+    </div>
+</div>
+</body>
+</html>
