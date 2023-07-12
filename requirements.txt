@@ -10,6 +10,7 @@ django-dotenv==1.4.2
 djangorestframework==3.14.0
 drf-yasg==1.21.6
 Faker==18.11.2
+gunicorn==20.1.0
 idna==3.4
 inflection==0.5.1
 itypes==1.2.0
