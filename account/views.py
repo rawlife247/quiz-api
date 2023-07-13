@@ -14,7 +14,16 @@ from django.utils.encoding import force_bytes, force_str
 
 from account.utils import send_reset_email
 
+from django.utils.decorators import method_decorator
 
+from .swagger import *
+
+
+@method_decorator(name='list', decorator=user_list_swagger_schema())
+@method_decorator(name='create', decorator=user_create_swagger_schema())
+@method_decorator(name='retrieve', decorator=user_retrieve_swagger_schema())
+@method_decorator(name='update', decorator=user_update_swagger_schema())
+@method_decorator(name='destroy', decorator=user_destroy_swagger_schema())
 class UserViewSets(viewsets.ModelViewSet):
     queryset = models.UserProfile.objects.all()
     serializer_class = serializers.UserSerializer
@@ -31,6 +40,7 @@ class UserViewSets(viewsets.ModelViewSet):
         return Response({'message': message}, status=status.HTTP_204_NO_CONTENT)
 
 
+@method_decorator(name='post', decorator=user_log_in_swagger_schema())
 class UserLoginApiView(ObtainAuthToken):
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
@@ -45,6 +55,7 @@ class UserLoginApiView(ObtainAuthToken):
         return response
 
 
+@method_decorator(name='post', decorator=user_log_out_swagger_schema())
 class LogoutView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -57,6 +68,7 @@ class LogoutView(APIView):
         return Response({'detail': 'Logged out successfully.'})
 
 
+@method_decorator(name='post', decorator=forgot_password_swagger_schema())
 class ForgotPasswordView(APIView):
 
     def post(self, request, format=None):
@@ -74,6 +86,7 @@ class ForgotPasswordView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@method_decorator(name='post', decorator=forgot_password_confirm_swagger_schema())
 class ForgotPasswordConfirmView(APIView):
     @staticmethod
     def get_user_from_encoded_token(token):
