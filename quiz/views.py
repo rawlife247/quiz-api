@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -6,13 +7,14 @@ from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
 from datetime import timedelta
 
+from .filters import ParticipantFilter
 from .models import Category, Tag, Quiz, Question, Answer, Participant, Feedback
 
-from .pagination import QuestionsSetPagination, QuizzesSetPagination, FeedbackSetPagination
+from .pagination import QuestionsSetPagination, QuizzesSetPagination, FeedbackSetPagination, LeaderboardPagination
 
 from .serializers import (
     CategorySerializer, TagSerializer, QuizSerializer,
-    QuestionSerializer, AnswerSerializer, FeedbackSerializer, SubmitQuizSerializer
+    QuestionSerializer, AnswerSerializer, FeedbackSerializer, SubmitQuizSerializer, ParticipantSerializer
 )
 from .permissions import IsStaffOrReadOnly, IsAuthenticatedOrReadOnly, IsFeedbackOwner
 
@@ -192,3 +194,13 @@ class FeedbackRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
         context = super().get_serializer_context()
         context['user'] = self.request.user
         return context
+
+
+class LeaderboardView(generics.ListAPIView):
+    serializer_class = ParticipantSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = ParticipantFilter
+    pagination_class = LeaderboardPagination
+
+    def get_queryset(self):
+        return Participant.objects.filter(has_passed=True).order_by('-score', 'end_time')

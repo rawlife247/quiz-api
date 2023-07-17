@@ -19,6 +19,7 @@ Django==4.2.2
 django-celery-beat==2.5.0
 django-celery-results==2.5.1
 django-dotenv==1.4.2
+django-filter==23.2
 django-timezone-field==5.1
 djangorestframework==3.14.0
 drf-yasg==1.21.6
