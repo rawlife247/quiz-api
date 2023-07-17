@@ -7,6 +7,9 @@ from django.utils import timezone
 from datetime import timedelta
 
 from .models import Category, Tag, Quiz, Question, Answer, Participant, Feedback
+
+from .pagination import QuestionsSetPagination, QuizzesSetPagination, FeedbackSetPagination
+
 from .serializers import (
     CategorySerializer, TagSerializer, QuizSerializer,
     QuestionSerializer, AnswerSerializer, FeedbackSerializer, SubmitQuizSerializer
@@ -57,6 +60,7 @@ class TagRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 class QuizListCreateView(generics.ListCreateAPIView):
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
+    pagination_class = QuizzesSetPagination
 
     permission_classes = (IsStaffOrReadOnly,)
 
@@ -121,6 +125,7 @@ class SubmitQuizView(APIView):
 class QuestionListCreateView(generics.ListCreateAPIView):
     serializer_class = QuestionSerializer
     permission_classes = (IsStaffOrReadOnly,)
+    pagination_class = QuestionsSetPagination
 
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -163,6 +168,7 @@ class FeedbackListCreateView(generics.ListCreateAPIView):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
+    pagination_class = FeedbackSetPagination
 
     def get_queryset(self):
         pk = self.kwargs['pk']

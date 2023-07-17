@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.reverse import reverse
+
 from .models import Category, Tag, Quiz, Question, Answer, Participant, Feedback
 from django.utils import timezone
 
@@ -76,13 +78,14 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
 class QuizSerializer(serializers.ModelSerializer):
-    questions = QuestionSerializer(many=True, required=False)
+    questions = QuestionSerializer(many=True, required=False, write_only=True)
+    questions_link = serializers.SerializerMethodField()
 
     class Meta:
         model = Quiz
         fields = (
             'id', 'title', 'description', 'time_limit', 'passing_marks_percentage', 'tags', 'categories', 'created_by',
-            'questions')
+            'questions', 'questions_link')
         read_only_fields = ['created_by', ]
 
     def create(self, validated_data):
@@ -118,6 +121,9 @@ class QuizSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+    def get_questions_link(self, obj):
+        return reverse('quiz:question-list-create', args=[obj.pk], request=self.context.get('request'))
 
 
 class SubmitAnswerSerializer(serializers.Serializer):
@@ -204,9 +210,14 @@ class SubmitQuizSerializer(serializers.Serializer):
 
 
 class FeedbackSerializer(serializers.ModelSerializer):
+    participant = serializers.SerializerMethodField()
+
     class Meta:
         model = Feedback
-        fields = ('id', 'rating', 'comment')
+        fields = ('id', 'rating', 'comment', 'participant')
+
+    def get_participant(self, obj):
+        return obj.participant.user.username
 
     def validate(self, data):
         quiz_id = self.context['view'].kwargs['pk']
