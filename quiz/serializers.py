@@ -239,3 +239,18 @@ class FeedbackSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return Feedback.objects.create(**validated_data)
+
+
+class ParticipantSerializer(serializers.ModelSerializer):
+    quiz = serializers.SerializerMethodField()
+    user = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Participant
+        fields = ('quiz', 'user', 'score',)
+
+    def get_quiz(self, obj):
+        return obj.quiz.title
+
+    def get_user(self, obj):
+        return obj.user.username

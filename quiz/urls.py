@@ -5,7 +5,7 @@ from .views import (
     QuizListCreateView, QuizRetrieveUpdateDeleteView,
     QuestionListCreateView, QuestionRetrieveUpdateDeleteView,
     AnswerListCreateView, AnswerRetrieveUpdateDeleteView,
-    FeedbackListCreateView, FeedbackRetrieveUpdateDeleteView, SubmitQuizView, StartQuizView
+    FeedbackListCreateView, FeedbackRetrieveUpdateDeleteView, SubmitQuizView, StartQuizView, LeaderboardView
 )
 
 app_name = 'quiz'
@@ -30,5 +30,7 @@ urlpatterns = [
     path('answers/<int:pk>/', AnswerRetrieveUpdateDeleteView.as_view(), name='answer-retrieve-update-delete'),
 
     path('quizzes/<int:pk>/feedback/', FeedbackListCreateView.as_view(), name='feedback-list-create'),
-    path('feedback/<int:pk>/', FeedbackRetrieveUpdateDeleteView.as_view(), name='feedback-retrieve-update-delete')
+    path('feedback/<int:pk>/', FeedbackRetrieveUpdateDeleteView.as_view(), name='feedback-retrieve-update-delete'),
+
+    path('leaderboard/', LeaderboardView.as_view(), name='leaderboard'),
 ]
