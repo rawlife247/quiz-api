@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import Category, Tag, Quiz, Question, Answer, Participant, Feedback
 from django.utils import timezone
 
+from .tasks import schedule_report_generation
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -78,7 +80,9 @@ class QuizSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Quiz
-        fields = ('id', 'title', 'description', 'time_limit', 'tags', 'categories', 'created_by', 'questions')
+        fields = (
+            'id', 'title', 'description', 'time_limit', 'passing_marks_percentage', 'tags', 'categories', 'created_by',
+            'questions')
         read_only_fields = ['created_by', ]
 
     def create(self, validated_data):
@@ -189,7 +193,14 @@ class SubmitQuizSerializer(serializers.Serializer):
 
         participant = Participant.objects.get(user=user, quiz=quiz)
         participant.score = score
+
+        if quiz.passing_marks_percentage > 0:
+            passing_marks = quiz.get_total_points() * (quiz.passing_marks_percentage / 100)
+            participant.has_passed = score >= passing_marks
+
         participant.save()
+
+        schedule_report_generation(participant.id)
 
 
 class FeedbackSerializer(serializers.ModelSerializer):

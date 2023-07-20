@@ -29,7 +29,6 @@ Follow the steps below to install and configure the Quiz App API:
    cd quiz-api
    ```
 
-
 3. Create a virtual environment for the project:
 
    ```shell
@@ -49,19 +48,21 @@ Follow the steps below to install and configure the Quiz App API:
    pip install -r requirements.txt
    ```
 
-5. Configure the email settings in the settings.py file:
+5. Configure the env variable :
 
    ```shell
-   EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-   EMAIL_HOST = "###"
+   SECRET_KEY = '###'
+
+   DEBUG = '###'
+   
    EMAIL_HOST_USER = '###'
    EMAIL_HOST_PASSWORD = '###'
-   EMAIL_PORT = 587
-   EMAIL_USE_TLS = True
-   EMAIL_USE_SSL = False
-   DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+   DATABASE_URL = '###'
+   ALLOWED_HOSTS= '###'
+   
+   CELERY_BROKER_URL = '###'
 
-   #Make sure to replace '###' with your own email credentials.
+   #Make sure to replace '###' with your own credentials.
    ```
 
 6. Apply the database migrations by running the following command:
@@ -74,6 +75,17 @@ Follow the steps below to install and configure the Quiz App API:
 
    ```shell
    python manage.py runserver
+   ```
+
+8. Install Redis and then start the server by
+   ```shell
+   redis-server
+   ```
+
+9. Start celery and celery beat
+   ```shell
+   celery -A QuizAPI beat -l info
+   celery -A QuizAPI worker --pool=solo -l info
    ```
 
 Please note that this installation assumes you have Python already set up on your system.

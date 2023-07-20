@@ -40,6 +40,14 @@ class Quiz(models.Model):
     created_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     categories = models.ManyToManyField(Category)
     tags = models.ManyToManyField(Tag)
+    passing_marks_percentage = models.PositiveIntegerField(default=33,
+                                                           validators=[MinValueValidator(1), MaxValueValidator(100)])
+
+    def get_total_points(self):
+        total_points = 0
+        for question in self.questions.all():
+            total_points += question.points
+        return total_points
 
     def __str__(self):
         return self.title
@@ -96,6 +104,7 @@ class Participant(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     score = models.IntegerField(null=True, blank=True)
+    has_passed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username} - {self.quiz.title}"
