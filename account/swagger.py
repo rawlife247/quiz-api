@@ -79,6 +79,34 @@ def user_log_out_swagger_schema():
     )
 
 
+def verify_token_swagger_schema():
+    return swagger_auto_schema(
+        operation_description="Provide token in header to verify user.",
+        responses={
+            200: openapi.Response(
+                description="User data",
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'user': openapi.Schema(
+                            type=openapi.TYPE_OBJECT,
+                            properties={
+                                'email': openapi.Schema(type=openapi.TYPE_STRING),
+                                'is_active': openapi.Schema(type=openapi.TYPE_BOOLEAN),
+                                'is_staff': openapi.Schema(type=openapi.TYPE_BOOLEAN),
+                                'is_superuser': openapi.Schema(type=openapi.TYPE_BOOLEAN)
+                            }
+                        )
+                    }
+                ),
+            ),
+            401: openapi.Response(
+                description="Authentication credentials were not provided or invalid."
+            )
+        }
+    )
+
+
 def forgot_password_swagger_schema():
     return swagger_auto_schema(
         operation_description="Initiate password reset.",
