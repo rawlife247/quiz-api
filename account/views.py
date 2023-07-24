@@ -68,6 +68,22 @@ class LogoutView(APIView):
         return Response({'detail': 'Logged out successfully.'})
 
 
+@method_decorator(name='get', decorator=verify_token_swagger_schema())
+class VerifyTokenView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        data = {
+            'email': user.email,
+            'is_active': user.is_active,
+            'is_staff': user.is_staff,
+            'is_superuser': user.is_superuser
+        }
+        return Response({'user': data}, status=status.HTTP_200_OK)
+
+
 @method_decorator(name='post', decorator=forgot_password_swagger_schema())
 class ForgotPasswordView(APIView):
 
