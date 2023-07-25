@@ -91,10 +91,8 @@ def verify_token_swagger_schema():
                         'user': openapi.Schema(
                             type=openapi.TYPE_OBJECT,
                             properties={
-                                'email': openapi.Schema(type=openapi.TYPE_STRING),
-                                'is_active': openapi.Schema(type=openapi.TYPE_BOOLEAN),
+                                'id': openapi.Schema(type=openapi.TYPE_INTEGER),
                                 'is_staff': openapi.Schema(type=openapi.TYPE_BOOLEAN),
-                                'is_superuser': openapi.Schema(type=openapi.TYPE_BOOLEAN)
                             }
                         )
                     }
