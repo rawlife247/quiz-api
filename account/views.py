@@ -76,10 +76,8 @@ class VerifyTokenView(APIView):
     def get(self, request):
         user = request.user
         data = {
-            'email': user.email,
-            'is_active': user.is_active,
+            'id': user.id,
             'is_staff': user.is_staff,
-            'is_superuser': user.is_superuser
         }
         return Response({'user': data}, status=status.HTTP_200_OK)
 
