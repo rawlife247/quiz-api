@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
@@ -177,8 +179,9 @@ class SubmitQuizSerializer(serializers.Serializer):
             quiz = Quiz.objects.get(id=quiz_id)
             participant = Participant.objects.get(user=self.context['request'].user, quiz=quiz)
 
+            tolerance_window = timedelta(seconds=30)
             current_time = timezone.now()
-            if current_time > participant.end_time:
+            if current_time > participant.end_time + tolerance_window:
                 raise serializers.ValidationError("Participant's time is over. Submission not allowed.")
 
         except Quiz.DoesNotExist:
