@@ -84,15 +84,15 @@ class QuizSerializer(serializers.ModelSerializer):
     questions_link = serializers.SerializerMethodField()
     tags = serializers.SlugRelatedField(
         many=True,
-        read_only=False,  # Set this to False to allow writing tags by name
-        slug_field='name',  # Specify the field to display as representation
-        queryset=Tag.objects.all()  # Replace 'Tag' with your actual Tag model
+        read_only=False,
+        slug_field='name',
+        queryset=Tag.objects.all()
     )
     categories = serializers.SlugRelatedField(
         many=True,
-        read_only=False,  # Set this to False to allow writing tags by name
-        slug_field='name',  # Specify the field to display as representation
-        queryset=Category.objects.all()  # Replace 'Tag' with your actual Tag model
+        read_only=False,
+        slug_field='name',
+        queryset=Category.objects.all()
     )
 
     class Meta:
