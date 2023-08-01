@@ -212,4 +212,4 @@ class UserQuizStatisticsView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Participant.objects.filter(user=user)
+        return Participant.objects.filter(user=user, score__isnull=False).order_by('end_time')
