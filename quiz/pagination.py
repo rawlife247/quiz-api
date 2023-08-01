@@ -23,3 +23,9 @@ class LeaderboardPagination(PageNumberPagination):
     page_size = 15
     page_size_query_param = 'participants'
     max_page_size = 50
+
+
+class GeneralPagination(PageNumberPagination):
+    page_size = 15
+    page_size_query_param = 'quizs'
+    max_page_size = 50

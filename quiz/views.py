@@ -1,25 +1,23 @@
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, status
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from datetime import timedelta
 
 from django.utils import timezone
-from datetime import timedelta
+from django.utils.decorators import method_decorator
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .filters import ParticipantFilter
 from .models import Category, Tag, Quiz, Question, Answer, Participant, Feedback
-
-from .pagination import QuestionsSetPagination, QuizzesSetPagination, FeedbackSetPagination, LeaderboardPagination
-
+from .pagination import QuestionsSetPagination, QuizzesSetPagination, FeedbackSetPagination, LeaderboardPagination, \
+    GeneralPagination
+from .permissions import IsStaffOrReadOnly, IsAuthenticatedOrReadOnly, IsFeedbackOwner
 from .serializers import (
     CategorySerializer, TagSerializer, QuizSerializer,
-    QuestionSerializer, AnswerSerializer, FeedbackSerializer, SubmitQuizSerializer, ParticipantSerializer
+    QuestionSerializer, AnswerSerializer, FeedbackSerializer, SubmitQuizSerializer, ParticipantSerializer,
+    UserQuizStatisticsSerializer
 )
-from .permissions import IsStaffOrReadOnly, IsAuthenticatedOrReadOnly, IsFeedbackOwner
-
-from django.utils.decorators import method_decorator
-
 from .swagger import *
 
 
@@ -204,3 +202,14 @@ class LeaderboardView(generics.ListAPIView):
 
     def get_queryset(self):
         return Participant.objects.filter(has_passed=True).order_by('-score', 'end_time')
+
+
+@method_decorator(name='get', decorator=quiz_statistics_swagger_schema())
+class UserQuizStatisticsView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserQuizStatisticsSerializer
+    pagination_class = GeneralPagination
+
+    def get_queryset(self):
+        user = self.request.user
+        return Participant.objects.filter(user=user)
