@@ -1,6 +1,8 @@
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 
+from quiz.serializers import UserQuizStatisticsSerializer
+
 
 def category_list_swagger_schema():
     return swagger_auto_schema(
@@ -323,4 +325,11 @@ def feedback_delete_swagger_schema():
         responses={
             204: "No Content",
         }
+    )
+
+
+def quiz_statistics_swagger_schema():
+    return swagger_auto_schema(
+        operation_description="Get statistics of a User",
+
     )

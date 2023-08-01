@@ -269,3 +269,31 @@ class ParticipantSerializer(serializers.ModelSerializer):
 
     def get_user(self, obj):
         return obj.user.username
+
+
+class UserQuizStatisticsSerializer(serializers.ModelSerializer):
+    quiz_id = serializers.ReadOnlyField(source='quiz.id')
+    quiz_title = serializers.ReadOnlyField(source='quiz.title')
+    quiz_total_marks = serializers.SerializerMethodField()
+    has_passed = serializers.SerializerMethodField()
+    date = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Participant
+        fields = [
+            'quiz_id',
+            'quiz_title',
+            'quiz_total_marks',
+            'score',
+            'date',
+            'has_passed',
+        ]
+
+    def get_quiz_total_marks(self, participant):
+        return participant.quiz.get_total_points()
+
+    def get_has_passed(self, participant):
+        return participant.has_passed
+
+    def get_date(self, participant):
+        return participant.start_time
