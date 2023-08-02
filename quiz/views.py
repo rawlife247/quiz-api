@@ -172,7 +172,7 @@ class FeedbackListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         pk = self.kwargs['pk']
-        return Feedback.objects.filter(quiz_id=pk)
+        return Feedback.objects.filter(quiz_id=pk).order_by('-id')
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -213,3 +213,40 @@ class UserQuizStatisticsView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return Participant.objects.filter(user=user, score__isnull=False).order_by('end_time')
+
+    def get_pass_rate(self, queryset):
+        total_passed = queryset.filter(has_passed=True).count()
+        total_participants = queryset.count()
+
+        if total_participants > 0:
+            pass_rate = (total_passed / total_participants) * 100
+            return round(pass_rate, 2)
+        return 0
+
+    def get_total_passed(self, queryset):
+        return queryset.filter(has_passed=True).count()
+
+    def get_total_failed(self, queryset):
+        return queryset.filter(has_passed=False).count()
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        pass_rate = self.get_pass_rate(queryset)
+        total_passed = self.get_total_passed(queryset)
+        total_failed = self.get_total_failed(queryset)
+
+        # Paginate the queryset
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            data = serializer.data
+
+            statistics_data = {
+                'pass_rate': pass_rate,
+                'total_passed': total_passed,
+                'total_failed': total_failed,
+                'data': data,
+            }
+            return self.get_paginated_response(statistics_data)
+
+        return Response([{'data': 'No data found'}], status=status.HTTP_200_OK)
