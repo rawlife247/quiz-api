@@ -258,11 +258,15 @@ class FeedbackSerializer(serializers.ModelSerializer):
 
 class ParticipantSerializer(serializers.ModelSerializer):
     quiz = serializers.SerializerMethodField()
+    quiz_id = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
 
     class Meta:
         model = Participant
-        fields = ('quiz', 'user', 'score',)
+        fields = ('quiz_id', 'quiz', 'user', 'score', 'start_time')
+
+    def get_quiz_id(self, obj):
+        return obj.quiz.id
 
     def get_quiz(self, obj):
         return obj.quiz.title
