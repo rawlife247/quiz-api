@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .filters import ParticipantFilter
+from .filters import ParticipantFilter, QuizFilter
 from .models import Category, Tag, Quiz, Question, Answer, Participant, Feedback
 from .pagination import QuestionsSetPagination, QuizzesSetPagination, FeedbackSetPagination, LeaderboardPagination, \
     GeneralPagination
@@ -58,10 +58,11 @@ class TagRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 @method_decorator(name='get', decorator=quiz_list_swagger_schema())
 @method_decorator(name='post', decorator=quiz_create_swagger_schema())
 class QuizListCreateView(generics.ListCreateAPIView):
-    queryset = Quiz.objects.all()
+    queryset = Quiz.objects.all().order_by('-id')
     serializer_class = QuizSerializer
     pagination_class = QuizzesSetPagination
-
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = QuizFilter
     permission_classes = (IsStaffOrReadOnly,)
 
     def perform_create(self, serializer):
