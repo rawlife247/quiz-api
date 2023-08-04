@@ -136,6 +136,13 @@ class QuizSerializer(serializers.ModelSerializer):
 
         return instance
 
+    def validate_time_limit(self, attrs):
+        if attrs['time_limit'] < 1:
+            raise serializers.ValidationError('Time limit should be more than 1 minute')
+        if attrs['time_limit'] > 240:
+            raise serializers.ValidationError('Time limit should be less than 240 minutes (4 hours)')
+        return attrs
+
     def get_questions_link(self, obj):
         return reverse('quiz:question-list-create', args=[obj.pk], request=self.context.get('request'))
 
