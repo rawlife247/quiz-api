@@ -8,7 +8,7 @@ class ParticipantFilter(filters.FilterSet):
 
     class Meta:
         model = Participant
-        fields = ['categories', 'tags', 'start_time']
+        fields = ['categories', 'tags']
 
     def filter_by_categories(self, queryset, name, value):
         categories = value.split(',')
