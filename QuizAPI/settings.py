@@ -78,6 +78,7 @@ WSGI_APPLICATION = 'QuizAPI.wsgi.application'
 
 # Database
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
